@@ -3,6 +3,7 @@ import axios from "axios";
 
 
 const user = JSON.parse(localStorage.getItem("user"));
+const API_URL = import.meta.env.VITE_API_URL;
 
 const initialState = {
     user: user || null,
@@ -13,7 +14,7 @@ const initialState = {
 
 export const registerUser = createAsyncThunk("auth/register", async (userData, thunkAPI) => {
     try {
-        const response = await axios.post("http://localhost:5000/api/auth/register", userData);
+        const response = await axios.post(`${API_URL}/api/auth/register`, userData);
         localStorage.setItem("user", JSON.stringify(response.data));
         return response.data;
     } catch (err) {

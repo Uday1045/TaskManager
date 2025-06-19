@@ -3,14 +3,15 @@ import axios from "axios";
 
 
 const getToken = () => JSON.parse(localStorage.getItem("user"))?.token;
-
+const API_URL = import.meta.env.VITE_API_URL;
 export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async (_, thunkAPI) => {
     try {
-        const res = await axios.get("http://localhost:5000/api/tasks", {
-            headers: {
-                Authorization: `Bearer ${getToken()}`,
-            },
-        });
+        const res = await axios.get(`${API_URL}/api/tasks`, {
+  headers: {
+    Authorization: `Bearer ${getToken()}`,
+  },
+});
+
         return res.data;
     } catch (err) {
         return thunkAPI.rejectWithValue("Failed to load tasks");
@@ -19,7 +20,7 @@ export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async (_, thunkAP
 
 export const addTask = createAsyncThunk("tasks/addTask", async (task, thunkAPI) => {
     try {
-        const res = await axios.post("http://localhost:5000/api/tasks", task, {
+        const res = await axios.post(`${API_URL}/api/tasks`, task, {
             headers: {
                 Authorization: `Bearer ${getToken()}`,
             },
@@ -34,11 +35,12 @@ export const deleteTask = createAsyncThunk(
     "tasks/deleteTask",
     async (id, thunkAPI) => {
         try {
-            await axios.delete(`http://localhost:5000/api/tasks/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${getToken()}`,
-                },
-            });
+           await axios.delete(`${API_URL}/api/tasks/${id}`, {
+    headers: {
+        Authorization: `Bearer ${getToken()}`,
+    },
+});
+
             return id;
         } catch (err) {
             console.error("DELETE error:", err.response?.data || err.message);
@@ -50,18 +52,19 @@ export const deleteTask = createAsyncThunk(
 );
 export const updateTask = createAsyncThunk("tasks/updateTask", async (task, thunkAPI) => {
     try {
-        const res = await axios.put(
-            `http://localhost:5000/api/tasks/${task._id}`,
-            {
-                title: task.title,
-                description: task.description,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${getToken()}`,
-                },
-            }
-        );
+       const res = await axios.put(
+    `${API_URL}/api/tasks/${task._id}`,
+    {
+        title: task.title,
+        description: task.description,
+    },
+    {
+        headers: {
+            Authorization: `Bearer ${getToken()}`,
+        },
+    }
+);
+
         return res.data;
     } catch (err) {
         return thunkAPI.rejectWithValue(
@@ -72,14 +75,14 @@ export const updateTask = createAsyncThunk("tasks/updateTask", async (task, thun
 
 export const toggleComplete = createAsyncThunk("tasks/toggleComplete", async (task, thunkAPI) => {
     try {
-        const res = await axios.put(`http://localhost:5000/api/tasks/${task._id}`, {
-            ...task,
-            completed: !task.completed,
-        }, {
-            headers: {
-                Authorization: `Bearer ${getToken()}`,
-            },
-        });
+       const res = await axios.put(`${API_URL}/api/tasks/${task._id}`, {
+    ...task,
+    completed: !task.completed,
+}, {
+    headers: {
+        Authorization: `Bearer ${getToken()}`,
+    },
+});
         return res.data;
     } catch (err) {
         return thunkAPI.rejectWithValue("Failed to update task");

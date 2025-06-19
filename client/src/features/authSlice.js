@@ -25,7 +25,7 @@ export const registerUser = createAsyncThunk("auth/register", async (userData, t
 
 export const loginUser = createAsyncThunk("auth/login", async (userData, thunkAPI) => {
     try {
-        const response = await axios.post("http://localhost:5000/api/auth/login", userData);
+      const response = await axios.post(`${API_URL}/api/auth/login`, userData);
         localStorage.setItem("user", JSON.stringify(response.data));
         return response.data;
     } catch (err) {
